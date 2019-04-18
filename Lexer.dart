@@ -83,7 +83,18 @@ class Lexer {
     String lexeme = this._sourceCode.substring(begin, this._position);
     String tokenName = this._finalStates[state];
     if (tokenName != null) {
-      return new Token(lexeme: lexeme, token: tokenName, type: '-');
+      Token token = new Token(lexeme: lexeme, token: tokenName, type: '-');
+
+      if (tokenName == 'Id') {
+        if (!this._symbolTable.containsKey(lexeme)) {
+          this._symbolTable[lexeme] = token;
+        }
+
+        return this._symbolTable[lexeme];
+      } else {
+        return token;
+      }
+
     } else {
       print('ERRO!');
       return null;

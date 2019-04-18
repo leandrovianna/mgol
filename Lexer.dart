@@ -38,7 +38,7 @@ class Lexer {
 
   Lexer(String sourceCodeFilename) {
     var file = new File(sourceCodeFilename);
-    this.sourceCode = file.readAsStringSync();
+    this.sourceCode = file.readAsStringSync() + '\$';
     this.position = 0;
     this._constructDFA();
   }
@@ -56,10 +56,9 @@ class Lexer {
         begin = this.position;
       }
 
-      var pair = Pair<int, String>(this.state, this.sourceCode[this.position]);
+      var pair = Pair(this.state, this.sourceCode[this.position]);
 
       if (this.transitions.containsKey(pair)) {
-        print('$pair -> ${transitions[pair]}');
         this.state = this.transitions[pair];
       } else {
         break;
@@ -88,6 +87,8 @@ class Lexer {
     this.transitions[Pair(0, '\n')] = 0;
     this.transitions[Pair(0, '\t')] = 0;
     this.transitions[Pair(0, ' ')] = 0;
+
+    this.transitions[Pair(0, '\$')] = 13; // $ represent EOF
 
     for (var ch in letters.split('')) {
       this.transitions[Pair(0, ch)] = 10;
@@ -161,6 +162,6 @@ class Lexer {
     this.transitions[Pair(19, '=')] = 20;
 
     this.finalStates = new Set();
-    this.finalStates.addAll([1, 3, 6, 9, 10, 18, 14, 16, 15, 22, 19, 20, 26, 24, 25, 23]);
+    this.finalStates.addAll([1, 3, 6, 9, 10, 13, 18, 14, 16, 15, 22, 19, 20, 26, 24, 25, 23]);
   }
 }

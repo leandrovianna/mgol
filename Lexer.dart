@@ -4,7 +4,7 @@ import 'dart:collection';
 class Token {
   String lexeme, token, type;
 
-  Token({this.lexeme, this.token, this.type});
+  Token({this.lexeme, this.token, this.type = ''});
 }
 
 class Pair<F, S> {
@@ -45,6 +45,10 @@ class Lexer {
 
   String _sourceCode;
   int _position;
+  int _line, _column;
+
+  int get currentLine => _line;
+  int get currentColumn => _column;
 
   Map<Pair<int, String>, int> _transitions;
   Map<int, String> _finalStates; // state number -> token name
@@ -55,6 +59,8 @@ class Lexer {
     var file = new File(sourceCodeFilename);
     this._sourceCode = file.readAsStringSync() + '\$';
     this._position = 0;
+    this._line = 1;
+    this._column = 0;
     this._constructDFA();
     this._populateKeywords();
   }
@@ -68,6 +74,13 @@ class Lexer {
       if (state == 0) {
         begin = this._position;
       }
+
+      if (this._sourceCode[this._position] == '\n') {
+        this._line++;
+        this._column = 0;
+      }
+
+      this._column++;
 
       var pair = Pair(state, this._sourceCode[this._position]);
 
@@ -94,10 +107,9 @@ class Lexer {
       } else {
         return token;
       }
-
     } else {
-      print('ERRO!');
-      return null;
+      this._position++;
+      return new Token(lexeme: lexeme, token: 'ERRO');
     }
   }
 

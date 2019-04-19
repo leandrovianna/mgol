@@ -7,11 +7,17 @@ main() {
   // cria um analisador lexico para o arquivo fonte texto.alg
   var lexer = new Lexer('texto.alg', symbolTable);
 
+  print('Lexema, Token, Tipo');
+
   // leitura dos tokens
   var token = lexer.getToken();
-  print('Lexema\tToken\tTipo');
+
   while (token != null) {
-    print('${token.lexeme}\t${token.token}\t${token.type}');
+    print('${token.lexeme}, ${token.token}, ${token.type}');
+    if (token.token == 'ERRO') {
+      print('Linha: ${lexer.currentLine}, Coluna: ${lexer.currentColumn}');
+    }
+
     token = lexer.getToken();
   }
 }

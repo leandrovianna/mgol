@@ -75,13 +75,6 @@ class Lexer {
         begin = this._position;
       }
 
-      if (this._sourceCode[this._position] == '\n') {
-        this._line++;
-        this._column = 0;
-      }
-
-      this._column++;
-
       var pair = Pair(state, this._sourceCode[this._position]);
 
       if (this._transitions.containsKey(pair)) {
@@ -89,6 +82,12 @@ class Lexer {
       } else {
         break;
       }
+
+      if (this._sourceCode[this._position] == '\n') {
+        this._line++;
+        this._column = 0;
+      }
+      this._column++;
 
       this._position++;
     }

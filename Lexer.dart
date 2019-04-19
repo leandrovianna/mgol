@@ -60,7 +60,7 @@ class Lexer {
     this._sourceCode = file.readAsStringSync() + '\$';
     this._position = 0;
     this._line = 1;
-    this._column = 0;
+    this._column = 1;
     this._constructDFA();
     this._populateKeywords();
   }
@@ -92,9 +92,10 @@ class Lexer {
       this._position++;
     }
 
-    String lexeme = this._sourceCode.substring(begin, this._position);
     String tokenName = this._finalStates[state];
+
     if (tokenName != null) {
+      String lexeme = this._sourceCode.substring(begin, this._position);
       Token token = new Token(lexeme: lexeme, token: tokenName, type: '-');
 
       if (tokenName == 'Id') {
@@ -108,6 +109,7 @@ class Lexer {
       }
     } else {
       this._position++;
+      String lexeme = this._sourceCode.substring(begin, this._position);
       return new Token(lexeme: lexeme, token: 'ERRO');
     }
   }

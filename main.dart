@@ -10,12 +10,12 @@ main() {
   // leitura dos tokens
   var token = lexer.getToken();
 
-  while (token != null) {
+  do {
+    token = lexer.getToken();
+
     print('${token.lexeme.padRight(25, ' ')}${token.token.padRight(25, ' ')}${token.type.padRight(25, ' ')}');
     if (token.token == 'ERRO') {
       print('Linha: ${lexer.currentLine}, Coluna: ${lexer.currentColumn}');
     }
-
-    token = lexer.getToken();
-  }
+  } while (token.token != 'EOF');
 }

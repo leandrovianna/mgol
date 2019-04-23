@@ -4,7 +4,7 @@ import 'dart:collection';
 class Token {
   String lexeme, token, type;
 
-  Token({this.lexeme, this.token, this.type = ''});
+  Token({this.lexeme = '', this.token = '', this.type = ''});
 }
 
 class Pair<F, S> {
@@ -57,7 +57,7 @@ class Lexer {
 
   Lexer(String sourceCodeFilename, this._symbolTable) {
     var file = new File(sourceCodeFilename);
-    this._sourceCode = file.readAsStringSync() + '\$';
+    this._sourceCode = file.readAsStringSync();
     this._position = 0;
     this._line = 1;
     this._column = 1;
@@ -66,8 +66,6 @@ class Lexer {
   }
 
   Token getToken() {
-    if (this._position == this._sourceCode.length) return null;
-
     int begin = 0, state = 0;
 
     while (this._position < this._sourceCode.length) {
@@ -96,7 +94,7 @@ class Lexer {
 
     if (tokenName != null) {
       String lexeme = this._sourceCode.substring(begin, this._position);
-      Token token = new Token(lexeme: lexeme, token: tokenName, type: '-');
+      Token token = Token(lexeme: lexeme, token: tokenName, type: '-');
 
       if (tokenName == 'Id') {
         if (!this._symbolTable.containsKey(lexeme)) {
@@ -108,9 +106,14 @@ class Lexer {
         return token;
       }
     } else {
+      // end of file
+      if (this._position == this._sourceCode.length) {
+        return Token(lexeme: 'EOF', token: 'EOF');
+      }
+
       this._position++;
       String lexeme = this._sourceCode.substring(begin, this._position);
-      return new Token(lexeme: lexeme, token: 'ERRO');
+      return Token(lexeme: lexeme, token: 'ERRO');
     }
   }
 

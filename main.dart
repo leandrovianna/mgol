@@ -14,6 +14,8 @@ main(List<String> args) {
   // cria um analisador lexico para o arquivo fonte sourceCode
   var lexer = new Lexer(sourceCode, symbolTable);
 
+  print('Lexema'.padRight(25, ' ') + 'Token'.padRight(25, ' ') + 'Tipo'.padRight(25, ' '));
+
   // leitura dos tokens
   var token = lexer.getToken();
 

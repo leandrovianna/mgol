@@ -130,8 +130,6 @@ class Lexer {
     this._transitions[Pair(0, '\t')] = 0;
     this._transitions[Pair(0, ' ')] = 0;
 
-    this._transitions[Pair(0, '\$')] = 13; // $ represent EOF
-
     for (var ch in letters.split('')) {
       this._transitions[Pair(0, ch)] = 10;
 

@@ -1,31 +1,7 @@
 import 'dart:io';
 import 'dart:collection';
-
-class Token {
-  String lexeme, token, type;
-
-  Token({this.lexeme = '', this.token = '', this.type = ''});
-}
-
-class Pair<F, S> {
-  F first;
-  S second;
-
-  Pair(this.first, this.second);
-
-  @override
-  String toString() => '($first, $second)';
-
-  @override
-  int get hashCode => first.hashCode ^ second.hashCode;
-
-  @override
-  bool operator ==(dynamic other) {
-    if (other is! Pair<F, S>) return false;
-
-    return other.first == this.first && other.second == this.second;
-  }
-}
+import 'Token.dart';
+import 'misc/Pair.dart';
 
 class Lexer {
   static const List<String> _KEYWORDS = [

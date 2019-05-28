@@ -1,4 +1,6 @@
-import 'Lexer.dart';
+import 'compiler/Lexer.dart';
+import 'compiler/Parser.dart';
+import 'compiler/Token.dart';
 import 'dart:collection';
 
 main(List<String> args) {
@@ -9,22 +11,10 @@ main(List<String> args) {
 
   String sourceCode = args[0];
 
-  Map<String, Token> symbolTable = new HashMap();
+  Map<String, Token> symbolTable = HashMap();
 
-  // cria um analisador lexico para o arquivo fonte sourceCode
-  var lexer = new Lexer(sourceCode, symbolTable);
+  Lexer lexer = Lexer(sourceCode, symbolTable);
+  Parser parser = Parser(lexer);
 
-  print('Lexema'.padRight(25, ' ') + 'Token'.padRight(25, ' ') + 'Tipo'.padRight(25, ' '));
-
-  // leitura dos tokens
-  var token = lexer.getToken();
-
-  do {
-    token = lexer.getToken();
-
-    print('${token.lexeme.padRight(25, ' ')}${token.token.padRight(25, ' ')}${token.type.padRight(25, ' ')}');
-    if (token.token == 'ERRO') {
-      print('ERRO: Linha: ${lexer.currentLine}, Coluna: ${lexer.currentColumn}');
-    }
-  } while (token.token != 'EOF');
+  parser.process();
 }

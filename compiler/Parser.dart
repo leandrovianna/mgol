@@ -11,8 +11,17 @@ class Parser {
   void process() {
     _constructPda();
 
+    var token = _lexer.getToken();
+
     while (true) {
-      var token = _lexer.getToken();
+      if (token.token == Term.eof) {
+        break;
+      }
+
+      if (token.token == Term.error) {
+        print('Lexer error.');
+      }
+
       var action = _pda.getAction(token);
 
       print(token);
@@ -20,6 +29,7 @@ class Parser {
 
       if (action?.type == ActionType.SHIFT) {
         _pda.shift(action.param);
+        token = _lexer.getToken();
       } else if (action?.type == ActionType.REDUCE) {
         _pda.reduce();
       } else if (action?.type == ActionType.ACCEPT) {
@@ -479,5 +489,83 @@ class Parser {
     _pda.addGoto(72, 'REP', 72);
     _pda.addGoto(72, 'REPCORPO', 77);
 
+    _pda.addReduction(0, 0, 0);
+    _pda.addReduction(1, 0, 1);
+    _pda.addReduction(2, 1, 1);
+    _pda.addReduction(3, 1, 2);
+    _pda.addReduction(4, 2, 1);
+    _pda.addReduction(5, 1, 3);
+    _pda.addReduction(6, 9, 1);
+    _pda.addReduction(7, 15, 1);
+    _pda.addReduction(8, 21, 1);
+    _pda.addReduction(9, 29, 1);
+    _pda.addReduction(10, 30, 1);
+    _pda.addReduction(11, 10, 1);
+    _pda.addReduction(12, 11, 1);
+    _pda.addReduction(13, 16, 1);
+    _pda.addReduction(14, 22, 1);
+    _pda.addReduction(15, 31, 1);
+    _pda.addReduction(16, 23, 1);
+    _pda.addReduction(17, 2, 2);
+    _pda.addReduction(18, 3, 1);
+    _pda.addReduction(19, 4, 1);
+    _pda.addReduction(20, 5, 1);
+    _pda.addReduction(21, 9, 2);
+    _pda.addReduction(22, 15, 2);
+    _pda.addReduction(23, 21, 2);
+    _pda.addReduction(24, 30, 2);
+    _pda.addReduction(25, 10, 2);
+    _pda.addReduction(26, 11, 2);
+    _pda.addReduction(27, 12, 1);
+    _pda.addReduction(28, 13, 1);
+    _pda.addReduction(29, 14, 1);
+    _pda.addReduction(30, 16, 2);
+    _pda.addReduction(31, 22, 2);
+    _pda.addReduction(32, 25, 1);
+    _pda.addReduction(33, 26, 1);
+    _pda.addReduction(34, 27, 1);
+    _pda.addReduction(35, 28, 1);
+    _pda.addReduction(36, 37, 1);
+    _pda.addReduction(37, 31, 2);
+    _pda.addReduction(38, 23, 2);
+    _pda.addReduction(39, 3, 2);
+    _pda.addReduction(40, 4, 2);
+    _pda.addReduction(41, 5, 2);
+    _pda.addReduction(42, 6, 1);
+    _pda.addReduction(43, 7, 1);
+    _pda.addReduction(44, 8, 1);
+    _pda.addReduction(45, 10, 3);
+    _pda.addReduction(46, 11, 3);
+    _pda.addReduction(47, 16, 3);
+    _pda.addReduction(48, 18, 1);
+    _pda.addReduction(49, 19, 1);
+    _pda.addReduction(50, 20, 1);
+    _pda.addReduction(51, 25, 2);
+    _pda.addReduction(52, 26, 2);
+    _pda.addReduction(53, 27, 2);
+    _pda.addReduction(54, 37, 2);
+    _pda.addReduction(55, 31, 3);
+    _pda.addReduction(56, 24, 1);
+    _pda.addReduction(57, 23, 3);
+    _pda.addReduction(58, 5, 3);
+    _pda.addReduction(59, 16, 4);
+    _pda.addReduction(60, 17, 2);
+    _pda.addReduction(61, 31, 4);
+    _pda.addReduction(62, 24, 2);
+    _pda.addReduction(63, 23, 4);
+    _pda.addReduction(64, 17, 3);
+    _pda.addReduction(65, 31, 5);
+    _pda.addReduction(66, 24, 3);
+    _pda.addReduction(67, 23, 5);
+    _pda.addReduction(68, 31, 6);
+    _pda.addReduction(69, 32, 1);
+    _pda.addReduction(70, 33, 1);
+    _pda.addReduction(71, 34, 1);
+    _pda.addReduction(72, 35, 1);
+    _pda.addReduction(73, 36, 1);
+    _pda.addReduction(74, 32, 2);
+    _pda.addReduction(75, 33, 2);
+    _pda.addReduction(76, 34, 2);
+    _pda.addReduction(77, 35, 2);
   }
 }

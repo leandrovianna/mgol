@@ -3,5 +3,5 @@ class Token {
 
   Token({this.lexeme = '', this.token = '', this.type = ''});
 
-  String toString() => "$lexeme, $token";
+  String toString() => "{Lexeme: $lexeme, Token: $token}";
 }

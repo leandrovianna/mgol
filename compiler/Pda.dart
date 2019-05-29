@@ -67,7 +67,9 @@ class Pda {
   }
 
   Action getAction(Token token) {
+    assert(!this._stack.isEmpty);
     var state = this._stack.last;
+    print('State $state');
     return _actions[Pair(state, token.token)];
   }
 

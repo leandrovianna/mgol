@@ -76,6 +76,7 @@ class Pda {
   }
 
   void reduce() {
+    assert(!this._stack.isEmpty);
     var state = this._stack.last;
     Reduction reduction = _reductions[state];
     assert(reduction != null);

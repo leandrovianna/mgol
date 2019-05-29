@@ -2,21 +2,26 @@ import 'dart:io';
 import 'dart:collection';
 import 'Token.dart';
 import '../misc/Pair.dart';
+import 'Term.dart';
 
 class Lexer {
   static const List<String> _KEYWORDS = [
-    'inicio',
-    'varinicio',
-    'varfim',
-    'escreva',
-    'leia',
-    'se',
-    'entao',
-    'fimse',
-    'fim',
-    'inteiro',
-    'lit',
-    'real'
+    Term.inicio,
+    Term.varinicio,
+    Term.varfim,
+    Term.escreva,
+    Term.leia,
+    Term.se,
+    Term.entao,
+    Term.fimse,
+    Term.fim,
+    Term.inteiro,
+    Term.lit,
+    Term.literal,
+    Term.real,
+    Term.enquanto,
+    Term.faca,
+    Term.fimenquanto,
   ];
 
   String _sourceCode;
@@ -72,7 +77,7 @@ class Lexer {
       String lexeme = this._sourceCode.substring(begin, this._position);
       Token token = Token(lexeme: lexeme, token: tokenName, type: '-');
 
-      if (tokenName == 'Id') {
+      if (tokenName == Term.id) {
         if (!this._symbolTable.containsKey(lexeme)) {
           this._symbolTable[lexeme] = token;
         }
@@ -84,12 +89,12 @@ class Lexer {
     } else {
       // end of file
       if (this._position == this._sourceCode.length) {
-        return Token(lexeme: 'EOF', token: 'EOF');
+        return Token(lexeme: 'EOF', token: Term.eof);
       }
 
       this._position++;
       String lexeme = this._sourceCode.substring(begin, this._position);
-      return Token(lexeme: lexeme, token: 'ERRO');
+      return Token(lexeme: lexeme, token: Term.error);
     }
   }
 
@@ -194,25 +199,25 @@ class Lexer {
       26,
       24,
       25,
-      23
+      23,
     ], [
-      'Num',
-      'Num',
-      'Num',
-      'Literal',
-      'Id',
-      'EOF',
-      'OPR',
-      'OPR',
-      'OPR',
-      'OPR',
-      'RCB',
-      'OPR',
-      'OPR',
-      'PT_V',
-      'AB_P',
-      'FC_P',
-      'OPM'
+      Term.numerico,
+      Term.numerico,
+      Term.numerico,
+      Term.literal,
+      Term.id,
+      Term.eof,
+      Term.opr,
+      Term.opr,
+      Term.opr,
+      Term.opr,
+      Term.rcb,
+      Term.opr,
+      Term.opr,
+      Term.ptv,
+      Term.abp,
+      Term.fcp,
+      Term.opm,
     ]);
   }
 

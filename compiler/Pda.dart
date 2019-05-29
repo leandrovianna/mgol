@@ -38,6 +38,7 @@ class Pda {
   Map<Pair<int, String>, int> _gotos;
   Map<int, Production> _productions;
   Map<int, Reduction> _reductions;
+  Map<String, List<String>> _follow;
 
   Queue<int> _stack;
 
@@ -48,6 +49,7 @@ class Pda {
     _reductions = HashMap<int, Reduction>();
     _stack = ListQueue();
     _stack.addLast(0);
+    _follow = HashMap<String, List<String>>();
   }
 
   void addProduction(int index, String left, String right) {
@@ -64,6 +66,10 @@ class Pda {
 
   void addReduction(int index, int prodIndex, int count) {
     _reductions[index] = Reduction(prodIndex, count);
+  }
+
+  void addFollow(String nonterminal, List<String> follow) {
+    _follow[nonterminal] = follow;
   }
 
   Action getAction(Token token) {

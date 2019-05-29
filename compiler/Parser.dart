@@ -14,10 +14,6 @@ class Parser {
     var token = _lexer.getToken();
 
     while (true) {
-      if (token.token == Term.eof) {
-        break;
-      }
-
       if (token.token == Term.error) {
         print('Lexer error.');
       }
@@ -84,8 +80,33 @@ class Parser {
     _pda.addProduction(36, 'REPCORPO', 'fimenquanto');
     _pda.addProduction(37, 'CORPO', 'REP CORPO');
 
+    _pda.addFollow('V', [Term.fim, Term.leia, Term.escreva,
+                          Term.id, Term.enquanto, Term.se]);
+    _pda.addFollow('LV', [Term.fim, Term.leia, Term.escreva,
+                          Term.id, Term.enquanto, Term.se]);
+    _pda.addFollow('D', [Term.varfim, Term.id]);
+    _pda.addFollow('TIPO', [Term.ptv]);
+    _pda.addFollow('ES', [Term.fim, Term.leia, Term.escreva, Term.id,
+                      Term.enquanto, Term.se, Term.fimse, Term.fimenquanto]);
+    _pda.addFollow('ARG', [Term.ptv]);
+    _pda.addFollow('CMD', [Term.fim, Term.leia, Term.escreva, Term.id,
+                      Term.enquanto, Term.se, Term.fimse, Term.fimenquanto]);
+    _pda.addFollow('LD', [Term.ptv]);
+    _pda.addFollow('OPRD', [Term.opm, Term.ptv, Term.opr, Term.fcp]);
+    _pda.addFollow('COND', [Term.fim, Term.leia, Term.escreva, Term.id,
+                      Term.enquanto, Term.se, Term.fimse, Term.fimenquanto]);
+    _pda.addFollow('CAB', [Term.leia, Term.escreva, Term.id, Term.fimse,
+        Term.enquanto, Term.se]);
+    _pda.addFollow('EXP_R', [Term.fcp]);
+    _pda.addFollow('CORPO', [Term.fim, Term.leia, Term.escreva, Term.id,
+                      Term.enquanto, Term.se, Term.fimse, Term.fimenquanto]);
+    _pda.addFollow('REP', [Term.fim, Term.leia, Term.escreva, Term.id,
+        Term.enquanto, Term.se, Term.fimenquanto, Term.fimse]);
+    _pda.addFollow('REPCORPO', [Term.fim, Term.leia, Term.escreva, Term.id,
+        Term.enquanto, Term.se, Term.fimenquanto, Term.fimse]);
+
     _pda.addAction(0, Term.inicio, ActionType.SHIFT, 2);
-    _pda.addAction(1, '\$', ActionType.ACCEPT, -1);
+    _pda.addAction(1, Term.eof, ActionType.ACCEPT, -1);
     _pda.addAction(2, 'varinicio', ActionType.SHIFT, 4);
     _pda.addAction(3, Term.id, ActionType.SHIFT, 13);
     _pda.addAction(3, 'leia', ActionType.SHIFT, 11);
@@ -95,7 +116,7 @@ class Parser {
     _pda.addAction(3, 'enquanto', ActionType.SHIFT, 15);
     _pda.addAction(4, 'varfim', ActionType.SHIFT, 19);
     _pda.addAction(4, Term.id, ActionType.SHIFT, 20);
-    _pda.addAction(5, '\$', ActionType.REDUCE, 1);
+    _pda.addAction(5, Term.eof, ActionType.REDUCE, 1);
     _pda.addAction(6, Term.id, ActionType.SHIFT, 13);
     _pda.addAction(6, 'leia', ActionType.SHIFT, 11);
     _pda.addAction(6, 'escreva', ActionType.SHIFT, 12);
@@ -114,7 +135,7 @@ class Parser {
     _pda.addAction(8, 'se', ActionType.SHIFT, 16);
     _pda.addAction(8, 'fim', ActionType.SHIFT, 9);
     _pda.addAction(8, 'enquanto', ActionType.SHIFT, 15);
-    _pda.addAction(9, '\$', ActionType.REDUCE, 29);
+    _pda.addAction(9, Term.eof, ActionType.REDUCE, 29);
     _pda.addAction(10, Term.id, ActionType.SHIFT, 13);
     _pda.addAction(10, 'leia', ActionType.SHIFT, 11);
     _pda.addAction(10, 'escreva', ActionType.SHIFT, 12);
@@ -146,10 +167,10 @@ class Parser {
     _pda.addAction(20, 'int', ActionType.SHIFT, 42);
     _pda.addAction(20, 'real', ActionType.SHIFT, 43);
     _pda.addAction(20, 'lit', ActionType.SHIFT, 44);
-    _pda.addAction(21, '\$', ActionType.REDUCE, 9);
-    _pda.addAction(22, '\$', ActionType.REDUCE, 15);
-    _pda.addAction(23, '\$', ActionType.REDUCE, 21);
-    _pda.addAction(24, '\$', ActionType.REDUCE, 30);
+    _pda.addAction(21, Term.eof, ActionType.REDUCE, 9);
+    _pda.addAction(22, Term.eof, ActionType.REDUCE, 15);
+    _pda.addAction(23, Term.eof, ActionType.REDUCE, 21);
+    _pda.addAction(24, Term.eof, ActionType.REDUCE, 30);
     _pda.addAction(25, ';', ActionType.SHIFT, 45);
     _pda.addAction(26, ';', ActionType.SHIFT, 46);
     _pda.addAction(27, ';', ActionType.REDUCE, 12);

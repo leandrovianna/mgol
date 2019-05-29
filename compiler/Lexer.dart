@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:collection';
 import 'Token.dart';
-import 'misc/Pair.dart';
+import '../misc/Pair.dart';
 
 class Lexer {
   static const List<String> _KEYWORDS = [

@@ -13,6 +13,8 @@ class Action {
   int param; // state or reduction
 
   Action(this.type, this.param);
+
+  String toString() => "${this.type}, ${this.param}";
 }
 
 class Production {
@@ -37,7 +39,6 @@ class Pda {
   Map<int, Production> _productions;
   Map<int, Reduction> _reductions;
 
-  int _state;
   Queue<int> _stack;
 
   Pda() {
@@ -45,8 +46,8 @@ class Pda {
     _gotos = HashMap<Pair<int, String>, int>();
     _productions = HashMap<int, Production>();
     _reductions = HashMap<int, Reduction>();
-    _state = 0;
     _stack = ListQueue();
+    _stack.addLast(0);
   }
 
   void addProduction(int index, String left, String right) {
@@ -66,15 +67,17 @@ class Pda {
   }
 
   Action getAction(Token token) {
-    return _actions[Pair(_state, token.token)];
+    var state = this._stack.last;
+    return _actions[Pair(state, token.token)];
   }
 
   void shift(int state) {
     this._stack.addLast(state);
   }
 
-  void reduce(int reductionIndex) {
-    Reduction reduction = _reductions[reductionIndex];
+  void reduce() {
+    var state = this._stack.last;
+    Reduction reduction = _reductions[state];
     assert(reduction != null);
 
     for (var i = 0; i < reduction.count; i++) {
@@ -82,9 +85,9 @@ class Pda {
       this._stack.removeLast();
     }
 
-    var top = this._stack.last;
+    state = this._stack.last;
     var prodIndex = reduction.prodIndex;
-    var newState = _gotos[Pair(top, _productions[prodIndex].left)];
+    var newState = _gotos[Pair(state, _productions[prodIndex].left)];
     assert(newState != null);
     this._stack.addLast(newState);
 

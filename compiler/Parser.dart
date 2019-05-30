@@ -12,8 +12,9 @@ class Parser {
     _constructPda();
 
     bool isError = false;
+    bool done = false;
 
-    while (true) {
+    while (!done) {
       try {
         var token = _lexer.getToken();
         
@@ -24,12 +25,14 @@ class Parser {
 
           if (type == ActionType.SHIFT) {
             if (token.token == Term.eof) {
-              return;
+              done = true;
+              break;
             }
 
             token = _lexer.getToken();
           } else if (type == ActionType.ACCEPT) {
-            return;
+            done = true;
+            break;
           }
         }
       } catch (error) {
@@ -37,6 +40,12 @@ class Parser {
         print('$error em linha ${_lexer.currentLine} e coluna ' +
             '${_lexer.currentColumn}');
       }
+    }
+
+    if (isError) {
+      print('Compilador terminou com erros.');
+    } else {
+      print('Compilação terminada.');
     }
   }
 

@@ -23,9 +23,12 @@ class Parser {
           var type = _pda.run(token);
 
           if (type == ActionType.SHIFT) {
+            if (token.token == Term.eof) {
+              return;
+            }
+
             token = _lexer.getToken();
-          } else if (type == ActionType.ACCEPT 
-              || token.token == Term.eof) {
+          } else if (type == ActionType.ACCEPT) {
             return;
           }
         }
@@ -79,12 +82,15 @@ class Parser {
     _pda.addProduction(36, 'REPCORPO', 'fimenquanto');
     _pda.addProduction(37, 'CORPO', 'REP CORPO');
 
+    _pda.addFollow("P'", [Term.eof]);
+    _pda.addFollow('P', [Term.eof]);
     _pda.addFollow('V', [Term.fim, Term.leia, Term.escreva,
                           Term.id, Term.enquanto, Term.se]);
     _pda.addFollow('LV', [Term.fim, Term.leia, Term.escreva,
                           Term.id, Term.enquanto, Term.se]);
     _pda.addFollow('D', [Term.varfim, Term.id]);
     _pda.addFollow('TIPO', [Term.ptv]);
+    _pda.addFollow('A', [Term.eof]);
     _pda.addFollow('ES', [Term.fim, Term.leia, Term.escreva, Term.id,
                       Term.enquanto, Term.se, Term.fimse, Term.fimenquanto]);
     _pda.addFollow('ARG', [Term.ptv]);

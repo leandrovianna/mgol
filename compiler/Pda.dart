@@ -99,10 +99,7 @@ class Pda {
   void runAction(Action action) {
     if (action == null) {
       this.error();
-      throw 'Erro sintático';
-    }
-
-    if (action.type == ActionType.SHIFT) {
+    } else if (action.type == ActionType.SHIFT) {
       this.shift(action.param);
     } else if (action.type == ActionType.REDUCE) {
       this.reduce();
@@ -161,5 +158,8 @@ class Pda {
 
       this.reduce();
     }
+
+    var output = terminals.join(', ');
+    throw 'Erro sintático: token não esperado. Esperado ($output)';
   }
 }

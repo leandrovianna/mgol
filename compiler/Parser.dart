@@ -11,29 +11,28 @@ class Parser {
   void process() {
     _constructPda();
 
-    var token = _lexer.getToken();
+    bool isError = false;
 
     while (true) {
-      if (token.token == Term.error) {
-        print('Lexer error.');
-      }
+      try {
+        var token = _lexer.getToken();
+        
+        while (true) {
+          print(token);
 
-      var action = _pda.getAction(token);
+          var type = _pda.run(token);
 
-      print(token);
-      print(action);
-
-      if (action?.type == ActionType.SHIFT) {
-        _pda.shift(action.param);
-        token = _lexer.getToken();
-      } else if (action?.type == ActionType.REDUCE) {
-        _pda.reduce();
-      } else if (action?.type == ActionType.ACCEPT) {
-        break;
-      } else {
-        // TODO: Rotina de Erro
-        print('Parser Error');
-        break;
+          if (type == ActionType.SHIFT) {
+            token = _lexer.getToken();
+          } else if (type == ActionType.ACCEPT 
+              || token.token == Term.eof) {
+            return;
+          }
+        }
+      } catch (error) {
+        isError = true;
+        print('$error em linha ${_lexer.currentLine} e coluna ' +
+            '${_lexer.currentColumn}');
       }
     }
   }

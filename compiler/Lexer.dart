@@ -94,7 +94,7 @@ class Lexer {
 
       this._position++;
       String lexeme = this._sourceCode.substring(begin, this._position);
-      return Token(lexeme: lexeme, token: Term.error);
+      throw 'Erro Léxico: Lexema não reconhecido $lexeme';
     }
   }
 
@@ -170,11 +170,13 @@ class Lexer {
 
     this._transitions[Pair(8, '"')] = 9;
     this._transitions[Pair(8, '\t')] = 8;
+    this._transitions[Pair(8, '\n')] = 8;
 
     this._transitions[Pair(10, '_')] = 10;
 
     this._transitions[Pair(12, '}')] = 0;
     this._transitions[Pair(12, '\t')] = 12;
+    this._transitions[Pair(12, '\n')] = 12;
 
     this._transitions[Pair(14, '>')] = 16;
     this._transitions[Pair(14, '=')] = 15;

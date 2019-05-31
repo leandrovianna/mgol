@@ -17,7 +17,7 @@ class Parser {
     while (!done) {
       try {
         var token = _lexer.getToken();
-        
+
         while (true) {
           print(token);
 
@@ -93,31 +93,79 @@ class Parser {
 
     _pda.addFollow("P'", [Term.eof]);
     _pda.addFollow('P', [Term.eof]);
-    _pda.addFollow('V', [Term.fim, Term.leia, Term.escreva,
-                          Term.id, Term.enquanto, Term.se]);
-    _pda.addFollow('LV', [Term.fim, Term.leia, Term.escreva,
-                          Term.id, Term.enquanto, Term.se]);
+    _pda.addFollow('V',
+        [Term.fim, Term.leia, Term.escreva, Term.id, Term.enquanto, Term.se]);
+    _pda.addFollow('LV',
+        [Term.fim, Term.leia, Term.escreva, Term.id, Term.enquanto, Term.se]);
     _pda.addFollow('D', [Term.varfim, Term.id]);
     _pda.addFollow('TIPO', [Term.ptv]);
     _pda.addFollow('A', [Term.eof]);
-    _pda.addFollow('ES', [Term.fim, Term.leia, Term.escreva, Term.id,
-                      Term.enquanto, Term.se, Term.fimse, Term.fimenquanto]);
+    _pda.addFollow('ES', [
+      Term.fim,
+      Term.leia,
+      Term.escreva,
+      Term.id,
+      Term.enquanto,
+      Term.se,
+      Term.fimse,
+      Term.fimenquanto
+    ]);
     _pda.addFollow('ARG', [Term.ptv]);
-    _pda.addFollow('CMD', [Term.fim, Term.leia, Term.escreva, Term.id,
-                      Term.enquanto, Term.se, Term.fimse, Term.fimenquanto]);
+    _pda.addFollow('CMD', [
+      Term.fim,
+      Term.leia,
+      Term.escreva,
+      Term.id,
+      Term.enquanto,
+      Term.se,
+      Term.fimse,
+      Term.fimenquanto
+    ]);
     _pda.addFollow('LD', [Term.ptv]);
     _pda.addFollow('OPRD', [Term.opm, Term.ptv, Term.opr, Term.fcp]);
-    _pda.addFollow('COND', [Term.fim, Term.leia, Term.escreva, Term.id,
-                      Term.enquanto, Term.se, Term.fimse, Term.fimenquanto]);
-    _pda.addFollow('CAB', [Term.leia, Term.escreva, Term.id, Term.fimse,
-        Term.enquanto, Term.se]);
+    _pda.addFollow('COND', [
+      Term.fim,
+      Term.leia,
+      Term.escreva,
+      Term.id,
+      Term.enquanto,
+      Term.se,
+      Term.fimse,
+      Term.fimenquanto
+    ]);
+    _pda.addFollow('CAB',
+        [Term.leia, Term.escreva, Term.id, Term.fimse, Term.enquanto, Term.se]);
     _pda.addFollow('EXP_R', [Term.fcp]);
-    _pda.addFollow('CORPO', [Term.fim, Term.leia, Term.escreva, Term.id,
-                      Term.enquanto, Term.se, Term.fimse, Term.fimenquanto]);
-    _pda.addFollow('REP', [Term.fim, Term.leia, Term.escreva, Term.id,
-        Term.enquanto, Term.se, Term.fimenquanto, Term.fimse]);
-    _pda.addFollow('REPCORPO', [Term.fim, Term.leia, Term.escreva, Term.id,
-        Term.enquanto, Term.se, Term.fimenquanto, Term.fimse]);
+    _pda.addFollow('CORPO', [
+      Term.fim,
+      Term.leia,
+      Term.escreva,
+      Term.id,
+      Term.enquanto,
+      Term.se,
+      Term.fimse,
+      Term.fimenquanto
+    ]);
+    _pda.addFollow('REP', [
+      Term.fim,
+      Term.leia,
+      Term.escreva,
+      Term.id,
+      Term.enquanto,
+      Term.se,
+      Term.fimenquanto,
+      Term.fimse
+    ]);
+    _pda.addFollow('REPCORPO', [
+      Term.fim,
+      Term.leia,
+      Term.escreva,
+      Term.id,
+      Term.enquanto,
+      Term.se,
+      Term.fimenquanto,
+      Term.fimse
+    ]);
 
     _pda.addAction(0, Term.inicio, ActionType.SHIFT, 2);
     _pda.addAction(1, Term.eof, ActionType.ACCEPT, -1);

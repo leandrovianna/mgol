@@ -1,7 +1,4 @@
-import 'compiler/Lexer.dart';
-import 'compiler/Parser.dart';
-import 'compiler/Token.dart';
-import 'dart:collection';
+import 'compiler/Compiler.dart';
 
 main(List<String> args) {
   if (args.length != 1) {
@@ -10,11 +7,6 @@ main(List<String> args) {
   }
 
   String sourceCode = args[0];
-
-  Map<String, Token> symbolTable = HashMap();
-
-  Lexer lexer = Lexer(sourceCode, symbolTable);
-  Parser parser = Parser(lexer);
-
-  parser.process();
+  Compiler compiler = Compiler(sourceCode, 'PROGRAMA.c');
+  compiler.compile();
 }

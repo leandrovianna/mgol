@@ -1,4 +1,6 @@
-class Term {
+import 'Token.dart';
+
+abstract class Term {
   static const String inicio = 'inicio';
   static const String varinicio = 'varinicio';
   static const String varfim = 'varfim';
@@ -25,4 +27,8 @@ class Term {
   static const String faca = 'faca';
   static const String eof = 'eof';
   static const String error = 'error';
+
+  static Token dummyToken(String terminal) {
+    return Token(lexeme: terminal, token: terminal);
+  }
 }

@@ -1,12 +1,14 @@
 import 'Lexer.dart';
+import 'Coder.dart';
 import 'Pda.dart';
 import 'Term.dart';
 
 class Parser {
   Lexer _lexer;
+  Coder _coder;
   Pda _pda;
 
-  Parser(this._lexer);
+  Parser(this._lexer, this._coder);
 
   void process() {
     _constructPda();
@@ -43,14 +45,14 @@ class Parser {
     }
 
     if (isError) {
-      print('Compilador terminou com erros.');
+      print('Compilação terminou com erros.');
     } else {
       print('Compilação terminada.');
     }
   }
 
   void _constructPda() {
-    _pda = Pda();
+    _pda = Pda((state, args) => _coder.semanticRule(state, args));
 
     _pda.addProduction(0, "P'", 'P');
     _pda.addProduction(1, 'P', 'inicio V A');

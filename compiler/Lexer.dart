@@ -17,7 +17,6 @@ class Lexer {
     Term.fim,
     Term.inteiro,
     Term.lit,
-    Term.literal,
     Term.real,
     Term.enquanto,
     Term.faca,

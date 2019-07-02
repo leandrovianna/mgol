@@ -1,4 +1,5 @@
 import '../misc/Pair.dart';
+import 'Term.dart';
 import 'Token.dart';
 import 'dart:collection';
 
@@ -40,37 +41,42 @@ class Pda {
   Map<int, Reduction> _reductions;
   Map<String, List<String>> _follow;
   List<String> _panicExpected;
+  var _onReduceCallback;
 
   Queue<int> _stack;
+  Queue<Token> _tokenStack;
 
-  Pda() {
+  Pda(Function onReduceCallback) {
     _actions = HashMap<Pair<int, String>, Action>();
     _gotos = HashMap<Pair<int, String>, int>();
     _productions = HashMap<int, Production>();
     _reductions = HashMap<int, Reduction>();
     _stack = ListQueue();
     _stack.addLast(0);
+    _tokenStack = ListQueue();
+    _tokenStack.addLast(Token());
     _follow = HashMap<String, List<String>>();
     _panicExpected = List<String>();
+    _onReduceCallback = onReduceCallback;
   }
 
-  void addProduction(int index, String left, String right) {
+  addProduction(int index, String left, String right) {
     _productions[index] = Production(left, right);
   }
 
-  void addAction(int state, String terminal, ActionType type, int param) {
+  addAction(int state, String terminal, ActionType type, int param) {
     _actions[Pair(state, terminal)] = Action(type, param);
   }
 
-  void addGoto(int state, String nonTerminal, int newState) {
+  addGoto(int state, String nonTerminal, int newState) {
     _gotos[Pair(state, nonTerminal)] = newState;
   }
 
-  void addReduction(int index, int prodIndex, int count) {
+  addReduction(int index, int prodIndex, int count) {
     _reductions[index] = Reduction(prodIndex, count);
   }
 
-  void addFollow(String nonterminal, List<String> follow) {
+  addFollow(String nonterminal, List<String> follow) {
     _follow[nonterminal] = follow;
   }
 
@@ -91,26 +97,27 @@ class Pda {
     var state = this._stack.last;
     var action = _actions[Pair(state, token.token)];
 
-    runAction(action);
+    this._runAction(action, token);
 
     return action.type;
   }
 
-  void runAction(Action action) {
+  _runAction(Action action, Token token) {
     if (action == null) {
-      this.error();
+      this._error();
     } else if (action.type == ActionType.SHIFT) {
-      this.shift(action.param);
+      this._shift(action.param, token);
     } else if (action.type == ActionType.REDUCE) {
-      this.reduce();
+      this._reduce();
     }
   }
 
-  void shift(int state) {
+  _shift(int state, Token token) {
     this._stack.addLast(state);
+    this._tokenStack.addLast(token);
   }
 
-  void reduce() {
+  _reduce() {
     assert(!this._stack.isEmpty);
 
     var state = this._stack.last;
@@ -118,11 +125,16 @@ class Pda {
 
     assert(reduction != null);
 
+    List<Token> args = []; // tokens on right of production
     for (var i = 0; i < reduction.count; i++) {
       assert(!this._stack.isEmpty);
 
+      args.insert(0, this._tokenStack.last);
       this._stack.removeLast();
+      this._tokenStack.removeLast();
     }
+
+    this._tokenStack.addLast(this._onReduceCallback(state, args));
 
     state = this._stack.last;
     var prodIndex = reduction.prodIndex;
@@ -135,7 +147,7 @@ class Pda {
     print(_productions[prodIndex]);
   }
 
-  void error() {
+  _error() {
     assert(!this._stack.isEmpty);
     var currState = this._stack.last;
 
@@ -150,13 +162,13 @@ class Pda {
       var action = _actions[Pair(currState, terminals[0])];
       assert(action != null);
 
-      this.runAction(action);
+      this._runAction(action, Term.dummyToken(terminals[0]));
     } else {
       var prodIndex = _reductions[currState].prodIndex;
       var prodLeft = _productions[prodIndex].left;
       this._panicExpected.addAll(_follow[prodLeft] ?? []);
 
-      this.reduce();
+      this._reduce();
     }
 
     var output = terminals.join(', ');

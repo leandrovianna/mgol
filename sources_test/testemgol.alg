@@ -6,10 +6,19 @@ inicio
     varinicio
         B inteiro;
         C literal;
+        C2 literal;
         A real;
         c inteiro;
         D inteiro;
     varfim;
+
+    leia C;
+    c <- 0;
+    enquanto (c <= 10) faca
+      escreva C;
+     escreva "\n";
+      c <- c + 1;
+    fimenquanto
 
    escreva "Digite um numero:";
    leia B;
@@ -20,6 +29,12 @@ inicio
    B <- 3;
    c <- B+1;
    c <- c+1;
+
+   C2 <- C;
+
+   escreva C2;
+   escreva "\n";
+
     
    se (B<1)
    entao

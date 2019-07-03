@@ -27,66 +27,65 @@ class Coder {
 
   Token semanticRule(int state, List<Token> args) {
     // for each reduction (represented by state)
-    // execute the semanticRule associated
+    // execute the semantic rule associated
 
     print(args);
     switch (state) {
-      case 40:
+      case 47:
         // LV -> varfim ;
         return this._endVarDecl();
-      case 58:
+      case 69:
         // D -> id TIPO ;
         return this._varDecl(args[0], args[1]);
-      case 42:
-      case 43:
-      case 44:
+      case 49:
+      case 50:
+      case 51:
         // TIPO -> inteiro
         // TIPO -> real
         // TIPO -> literal
         return this._typeDef(args[0]);
-      case 45:
+      case 52:
         // ES -> leia id ;
         return this._readVar(args[1]);
-      case 46:
+      case 53:
         // ES -> escreva ARG ;
         return this._writeVar(args[1]);
-      case 27:
       case 28:
       case 29:
+      case 30:
         // ARG -> const_literal
         // ARG -> num
         // ARG -> id
         return this._argDef(args[0]);
-      case 59:
+      case 70:
         // CMD -> id rcb LD ;
         return this._assigment(args[0], args[1], args[2]);
-      case 64:
+      case 75:
         // LD -> OPRD opm OPRD
         return this._mathOperation(args[0], args[1], args[2]);
-      case 48:
+      case 55:
         // LD -> OPRD
         return this._rightHandSingle(args[0]);
-      case 49:
-      case 50:
+      case 56:
+      case 57:
         // OPRD -> id
         // OPRD -> num
         return this._operand(args[0]);
-      // case 31:
-      case 35:
+      case 32:
         // COND -> CAB CORPO
         return this._ifend();
-      case 67:
+      case 76:
         // CAB -> se ( EXP_R ) entao
         return this._ifbegin(args[2]);
-      case 66:
+      case 77:
         // EXP_R -> OPRD opr OPRD
         return this._relational(args[0], args[1], args[2]);
-      case 65:
-        // REP -> enquanto ( EXP_R ) faca . REPCORPO
+      case 78:
+        // REPCAB -> enquanto ( EXP_R ) faca
         return this._whilebegin(args[2]);
-      case 68:
-        // REP -> enquanto ( EXP_R ) faca REPCORPO .
-        return this._whileend();
+      case 38:
+        // REP -> REPCAB REPCORPO
+        return this._whileend(args[0]);
     }
 
     return null;
@@ -117,6 +116,7 @@ class Coder {
 
     sink.write('''
 #include <stdio.h>
+#include <string.h>
 
 typedef char literal[512];
 
@@ -235,7 +235,11 @@ int main() {
       throw 'Erro semântico: Tipos diferentes para atribução';
     }
 
-    this._writeLine('${id.lexeme} ${rcb.type} ${ld.lexeme};');
+    if (id.type == Term.lit) {
+      this._writeLine('strcpy(${id.lexeme}, ${ld.lexeme});');
+    } else {
+      this._writeLine('${id.lexeme} ${rcb.type} ${ld.lexeme};');
+    }
 
     return Token(lexeme: '', token: 'CMD');
   }
@@ -294,19 +298,20 @@ int main() {
     var tx = this._newTemp(Term.inteiro);
     Token expr = Token(lexeme: tx, token: 'EXP_R', type: Term.inteiro);
     this._writeLine(
-        '$tx = ${operand1.lexeme} ${operation.type} ${operand2.lexeme};');
+        'L$tx: $tx = ${operand1.lexeme} ${operation.type} ${operand2.lexeme};');
     return expr;
   }
 
   Token _whilebegin(Token expr) {
-    this._writeLine('while (${expr.lexeme}) {');
+    this._writeLine('if (${expr.lexeme}) {');
     this._incrementTabs();
-    return Token(lexeme: '', token: 'REP');
+    return Token(lexeme: 'L${expr.lexeme}', token: 'REPCAB');
   }
 
-  Token _whileend() {
+  Token _whileend(Token repcab) {
+    this._writeLine('goto ${repcab.lexeme};');
     this._decrementTabs();
     this._writeLine('}');
-    return Token(lexeme: '', token: 'REPCORPO');
+    return Token(lexeme: '', token: 'REP');
   }
 }

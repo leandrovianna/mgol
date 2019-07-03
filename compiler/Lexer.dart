@@ -80,7 +80,10 @@ class Lexer {
           type = lexeme;
           break;
         case Term.opr:
-          type = lexeme;
+          if (lexeme == '=')
+            type = '==';
+          else
+            type = lexeme;
           break;
         case Term.rcb:
           type = '=';

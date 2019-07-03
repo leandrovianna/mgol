@@ -74,7 +74,7 @@ class Lexer {
 
     if (tokenName != null) {
       String lexeme = this._sourceCode.substring(begin, this._position);
-      String type = '-';
+      String type = null;
       switch (tokenName) {
         case Term.opm:
           type = lexeme;
@@ -84,6 +84,12 @@ class Lexer {
           break;
         case Term.rcb:
           type = '=';
+          break;
+        case Term.numerico:
+          type = state == 1 ? Term.inteiro : Term.real;
+          break;
+        case Term.literal:
+          type = Term.lit;
           break;
       }
 

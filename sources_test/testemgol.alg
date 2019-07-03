@@ -4,8 +4,8 @@ e Larissa Santos}
 
 inicio
     varinicio
-        B int;
-        C lit;
+        B inteiro;
+        C literal;
         A real;
     varfim;
 

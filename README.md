@@ -12,13 +12,13 @@ Mgol is the programming language for case study of Compiler class of 2019/1.
 | 4  | LV -> D LV                              |
 | 5  | LV -> varfim ;                          |
 | 6  | D -> id TIPO ;                          |
-| 7  | TIPO -> int                             |
+| 7  | TIPO -> inteiro                         |
 | 8  | TIPO -> real                            |
-| 9  | TIPO -> lit                             |
+| 9  | TIPO -> literal                         |
 | 10 | A -> ES A                               |
 | 11 | ES -> leia id ;                         |
 | 12 | ES -> escreva ARG ;                     |
-| 13 | ARG -> literal                          |
+| 13 | ARG -> const_literal                    |
 | 14 | ARG -> num                              |
 | 15 | ARG -> id                               |
 | 16 | A -> CMD A                              |

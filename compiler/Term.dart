@@ -10,13 +10,13 @@ abstract class Term {
   static const String entao = 'entao';
   static const String fimse = 'fimse';
   static const String fim = 'fim';
-  static const String inteiro = 'int';
-  static const String lit = 'lit';
+  static const String inteiro = 'inteiro';
+  static const String lit = 'literal';
   static const String real = 'real';
   static const String enquanto = 'enquanto';
   static const String fimenquanto = 'fimenquanto';
   static const String id = 'id';
-  static const String literal = 'literal';
+  static const String literal = 'const_literal';
   static const String numerico = 'num';
   static const String rcb = 'rcb';
   static const String opm = 'opm';

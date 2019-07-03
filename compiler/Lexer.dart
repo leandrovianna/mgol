@@ -74,7 +74,20 @@ class Lexer {
 
     if (tokenName != null) {
       String lexeme = this._sourceCode.substring(begin, this._position);
-      Token token = Token(lexeme: lexeme, token: tokenName, type: '-');
+      String type = '-';
+      switch (tokenName) {
+        case Term.opm:
+          type = lexeme;
+          break;
+        case Term.opr:
+          type = lexeme;
+          break;
+        case Term.rcb:
+          type = '=';
+          break;
+      }
+
+      Token token = Token(lexeme: lexeme, token: tokenName, type: type);
 
       if (tokenName == Term.id) {
         if (!this._symbolTable.containsKey(lexeme)) {
@@ -225,7 +238,7 @@ class Lexer {
   void _populateKeywords() {
     for (var keyword in _KEYWORDS) {
       this._symbolTable[keyword] =
-          new Token(lexeme: keyword, token: keyword, type: '-');
+          new Token(lexeme: keyword, token: keyword, type: keyword);
     }
   }
 }

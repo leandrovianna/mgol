@@ -47,6 +47,7 @@ class Parser {
     if (isError) {
       print('Compilação terminou com erros.');
     } else {
+      _coder.build(); // generate target code
       print('Compilação terminada.');
     }
   }
@@ -60,9 +61,9 @@ class Parser {
     _pda.addProduction(3, 'LV', 'D LV');
     _pda.addProduction(4, 'LV', 'varfim ;');
     _pda.addProduction(5, 'D', 'id TIPO ;');
-    _pda.addProduction(6, 'TIPO', 'int');
+    _pda.addProduction(6, 'TIPO', 'inteiro');
     _pda.addProduction(7, 'TIPO', 'real');
-    _pda.addProduction(8, 'TIPO', 'lit');
+    _pda.addProduction(8, 'TIPO', 'literal');
     _pda.addProduction(9, 'A', 'ES A');
     _pda.addProduction(10, 'ES', 'leia id ;');
     _pda.addProduction(11, 'ES', 'escreva ARG ;');
@@ -208,7 +209,7 @@ class Parser {
     _pda.addAction(10, 'enquanto', ActionType.SHIFT, 15);
     _pda.addAction(11, Term.id, ActionType.SHIFT, 25);
     _pda.addAction(12, Term.id, ActionType.SHIFT, 29);
-    _pda.addAction(12, 'literal', ActionType.SHIFT, 27);
+    _pda.addAction(12, Term.literal, ActionType.SHIFT, 27);
     _pda.addAction(12, 'num', ActionType.SHIFT, 28);
     _pda.addAction(13, 'rcb', ActionType.SHIFT, 30);
     _pda.addAction(14, Term.id, ActionType.SHIFT, 13);
@@ -228,9 +229,9 @@ class Parser {
     _pda.addAction(18, 'varfim', ActionType.SHIFT, 19);
     _pda.addAction(18, Term.id, ActionType.SHIFT, 20);
     _pda.addAction(19, ';', ActionType.SHIFT, 40);
-    _pda.addAction(20, 'int', ActionType.SHIFT, 42);
-    _pda.addAction(20, 'real', ActionType.SHIFT, 43);
-    _pda.addAction(20, 'lit', ActionType.SHIFT, 44);
+    _pda.addAction(20, Term.inteiro, ActionType.SHIFT, 42);
+    _pda.addAction(20, Term.real, ActionType.SHIFT, 43);
+    _pda.addAction(20, Term.lit, ActionType.SHIFT, 44);
     _pda.addAction(21, Term.eof, ActionType.REDUCE, 9);
     _pda.addAction(22, Term.eof, ActionType.REDUCE, 15);
     _pda.addAction(23, Term.eof, ActionType.REDUCE, 21);

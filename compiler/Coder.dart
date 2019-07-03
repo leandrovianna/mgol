@@ -15,12 +15,14 @@ class TempVar {
 class Coder {
   String _targetFile;
   String _objcode;
+  int _tabs;
   HashMap<String, Token> _symbolTable;
   List<TempVar> _tempVars;
 
   Coder(this._targetFile, this._symbolTable) {
     this._objcode = '';
     this._tempVars = [];
+    this._tabs = 1;
   }
 
   Token semanticRule(int state, List<Token> args) {
@@ -69,7 +71,8 @@ class Coder {
         // OPRD -> id
         // OPRD -> num
         return this._operand(args[0]);
-      case 31:
+      // case 31:
+      case 35:
         // COND -> CAB CORPO
         return this._ifend();
       case 67:
@@ -78,12 +81,21 @@ class Coder {
       case 66:
         // EXP_R -> OPRD opr OPRD
         return this._relational(args[0], args[1], args[2]);
+      case 65:
+        // REP -> enquanto ( EXP_R ) faca . REPCORPO
+        return this._whilebegin(args[2]);
+      case 68:
+        // REP -> enquanto ( EXP_R ) faca REPCORPO .
+        return this._whileend();
     }
 
     return null;
   }
 
   _writeLine(String line) {
+    for (int i = 0; i < this._tabs; i++) {
+      this._objcode += '  ';
+    }
     this._objcode += line + '\n';
   }
 
@@ -91,6 +103,12 @@ class Coder {
     String name = 'T${this._tempVars.length}';
     this._tempVars.add(TempVar(type, name));
     return name;
+  }
+
+  _incrementTabs() => _tabs = _tabs + 1;
+
+  _decrementTabs() {
+    if (_tabs > 1) _tabs = _tabs - 1;
   }
 
   build() {
@@ -101,20 +119,19 @@ class Coder {
 #include <stdio.h>
 
 typedef char literal[512];
-typedef double real;
 
 int main() {
 ''');
     for (var tmp in this._tempVars) {
       switch (tmp.type) {
         case Term.inteiro:
-          sink.write('int ');
+          sink.write('  int ');
           break;
         case Term.real:
-          sink.write('double ');
+          sink.write('  double ');
           break;
         case Term.lit:
-          sink.write('literal ');
+          sink.write('  literal ');
           break;
       }
 
@@ -259,10 +276,12 @@ int main() {
 
   Token _ifbegin(Token expr) {
     this._writeLine('if (${expr.lexeme}) {');
+    this._incrementTabs();
     return Token(lexeme: '', token: 'CAB');
   }
 
   Token _ifend() {
+    this._decrementTabs();
     this._writeLine('}');
     return Token(lexeme: '', token: 'COND');
   }
@@ -277,5 +296,17 @@ int main() {
     this._writeLine(
         '$tx = ${operand1.lexeme} ${operation.type} ${operand2.lexeme};');
     return expr;
+  }
+
+  Token _whilebegin(Token expr) {
+    this._writeLine('while (${expr.lexeme}) {');
+    this._incrementTabs();
+    return Token(lexeme: '', token: 'REP');
+  }
+
+  Token _whileend() {
+    this._decrementTabs();
+    this._writeLine('}');
+    return Token(lexeme: '', token: 'REPCORPO');
   }
 }

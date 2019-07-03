@@ -7,6 +7,8 @@ inicio
         B inteiro;
         C literal;
         A real;
+        c inteiro;
+        D inteiro;
     varfim;
 
    escreva "Digite um numero:";

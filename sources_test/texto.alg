@@ -1,8 +1,8 @@
 inicio
    varinicio
-      A lit;
-      B int;
-      c int;
+      A literal;
+      B inteiro;
+      c inteiro;
    varfim;
 
    escreva "Digite um nome:";
@@ -11,13 +11,12 @@ inicio
    escreva "Digite um numero:";
    leia B;
 
-    3d$
    B <- 2;
    B <- 3;
    c <- B1;
-   c - c+1;
+   c <- c+1;
     
-   se (B<1)
+   se (B<"Oi")
    entao
      se (c <2)
      entao

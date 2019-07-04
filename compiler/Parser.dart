@@ -39,7 +39,7 @@ class Parser {
         }
       } catch (error) {
         isError = true;
-        print('$error em linha ${_lexer.currentLine} e coluna ' +
+        print('[ERRO] $error em linha ${_lexer.currentLine} e coluna ' +
             '${_lexer.currentColumn}');
       }
     }

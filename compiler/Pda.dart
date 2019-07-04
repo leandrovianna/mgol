@@ -134,7 +134,7 @@ class Pda {
       this._tokenStack.removeLast();
     }
 
-    this._tokenStack.addLast(this._onReduceCallback(state, args));
+    Token tk = this._onReduceCallback(state, args);
 
     state = this._stack.last;
     var prodIndex = reduction.prodIndex;
@@ -143,6 +143,9 @@ class Pda {
     assert(newState != null);
 
     this._stack.addLast(newState);
+
+    tk ??= Token(lexeme: '', token: _productions[prodIndex].left);
+    this._tokenStack.addLast(tk);
 
     print(_productions[prodIndex]);
   }

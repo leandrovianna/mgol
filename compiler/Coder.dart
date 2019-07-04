@@ -120,7 +120,8 @@ class Coder {
 
 typedef char literal[512];
 
-int main() {
+int main(void) {
+  /*----Variaveis temporarias----*/
 ''');
     for (var tmp in this._tempVars) {
       switch (tmp.type) {
@@ -137,6 +138,7 @@ int main() {
 
       sink.write('${tmp.name};\n');
     }
+    sink.write('  /*------------------------------*/\n');
 
     sink.write(_objcode);
 
